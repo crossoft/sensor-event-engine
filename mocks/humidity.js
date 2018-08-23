@@ -3,8 +3,8 @@ const sendEvent = require('./sendEvent')
 const withDefaults = require('./withDefaults')
 
 sendEvent(withDefaults({
-  messageType: 'temperature',
+  messageType: 'humidity',
   measureValues: {
-    value: _.random(-40, 50),
+    value: _.random(0, 100),
   }
 }))

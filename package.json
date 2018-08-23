@@ -5,7 +5,12 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
-    "mockTemperature": "node mocks/temperature.js"
+    "mockAccelerometer": "node mocks/accelerometer.js",
+    "mockBattery": "node mocks/battery.js",
+    "mockTemperature": "node mocks/temperature.js",
+    "mockHumidity": "node mocks/humidity.js",
+    "mockMotion": "node mocks/motion.js",
+    "mockAll": "yarn run mockAccelerometer; yarn run mockBattery; yarn run mockTemperature; yarn run mockHumidity; yarn run mockMotion"
   },
   "dependencies": {
     "body-parser": "^1.18.3",

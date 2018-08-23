@@ -3,8 +3,10 @@ const sendEvent = require('./sendEvent')
 const withDefaults = require('./withDefaults')
 
 sendEvent(withDefaults({
-  messageType: 'temperature',
+  messageType: 'accelerometer',
   measureValues: {
-    value: _.random(-40, 50),
+    x: _.random(-300, 300, true),
+    y: _.random(-300, 300, true),
+    z: _.random(-300, 300, true),
   }
 }))
