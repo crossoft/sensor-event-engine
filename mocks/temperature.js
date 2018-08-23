@@ -4,7 +4,7 @@ const _ = require('lodash')
 const sendEvent = require('./sendEvent')
 
 sendEvent({
-  "sensorId" : uuidv1,
+  "sensorId" : process.env.MOCK_EXTERNAL_ID || uuidv1(),
   "messageType" : "temperature",
   "signalStrength" : _.random(0, 10),
   "dateTimeUtc" : moment.utc().format(),

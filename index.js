@@ -1,9 +1,11 @@
 const express = require('express')
+const bodyParser = require('body-parser')
+const createEvents = require('./events/create')
+
 const app = express()
 
-app.post('/events', (req, res) =>
-  res.json({ success: true })
-)
+app.use(bodyParser.json())
+app.post('/events', createEvents)
 
 const port = 3000
 const opts = {
