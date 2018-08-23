@@ -1,0 +1,14 @@
+{
+  "name": "sensor-event-engine",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "sequelize": "^4.38.0",
+    "sqlite3": "^4.0.2"
+  }
+}
