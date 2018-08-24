@@ -5,15 +5,11 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
-    "mockAccelerometer": "node mocks/accelerometer.js",
-    "mockBattery": "node mocks/battery.js",
-    "mockTemperature": "node mocks/temperature.js",
-    "mockHumidity": "node mocks/humidity.js",
-    "mockMotion": "node mocks/motion.js",
-    "mockAll": "yarn run mockAccelerometer; yarn run mockBattery; yarn run mockTemperature; yarn run mockHumidity; yarn run mockMotion"
+    "mock": "node cli/index.js mock"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
+    "commander": "^2.17.1",
     "express": "^4.16.3",
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
