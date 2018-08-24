@@ -3,7 +3,7 @@ const dateTimeColumn = require('./helpers/dateTimeColumn')
 
 const db = new Sequelize('db', null, null, {
   dialect: 'sqlite',
-  storage: './db.sqlite',
+  storage: './db/db.sqlite',
   operatorsAliases: false,
   pool: {
     max: 100,
@@ -51,7 +51,7 @@ const Reading = db.define('reading', {
 Event.hasMany(Reading)
 Reading.belongsTo(Event)
 
-db.sync({ force: true })
+db.sync()
 
 module.exports = {
   Sensor,
