@@ -10,6 +10,15 @@ const db = new Sequelize('db', null, null, {
   },
 })
 
+const Device = db.define('device', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  createdAt: dateTimeColumn('createdAt'),
+})
+
 const Sensor = db.define('sensor', {
   id: {
     type: Sequelize.INTEGER,
@@ -21,6 +30,9 @@ const Sensor = db.define('sensor', {
   },
   createdAt: dateTimeColumn('createdAt'),
 })
+
+Device.hasMany(Sensor)
+Sensor.belongsTo(Device)
 
 const Event = db.define('event', {
   id: {
@@ -57,5 +69,6 @@ module.exports = {
   Sensor,
   Event,
   Reading,
+  Device,
   db,
 }
