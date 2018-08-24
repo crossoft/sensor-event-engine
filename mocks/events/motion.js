@@ -1,8 +1,8 @@
 const _ = require('lodash')
 
-module.exports = ({
+module.exports = {
   messageType: 'motion',
   measureValues: {
     value: _.sample([true, false]),
   }
-})
+}
