@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
-    "mock": "node cli/index.js mock",
-    "show": "node cli/index.js show"
+    "mock": "SQL_LOGGING=false node cli/index.js mock",
+    "show": "SQL_LOGGING=false node cli/index.js show"
   },
   "dependencies": {
     "body-parser": "^1.18.3",

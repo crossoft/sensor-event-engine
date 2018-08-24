@@ -5,6 +5,7 @@ const db = new Sequelize('db', null, null, {
   dialect: 'sqlite',
   storage: './db/db.sqlite',
   operatorsAliases: false,
+  logging: process.env.SQL_LOGGING === 'false' ? false : console.log,
   pool: {
     max: 100,
   },
