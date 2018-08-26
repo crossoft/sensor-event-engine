@@ -5,6 +5,7 @@ const {
   Device,
 } = require('../db')
 const extractReadings = require('./extractReadings')
+const applyRules = require('../rules/apply')
 
 module.exports = async (req, res) => {
   const {
@@ -28,7 +29,7 @@ module.exports = async (req, res) => {
     return sensor
   })
 
-  await Event.create({
+  const event = await Event.create({
     sensorId: sensor.id,
     type: messageType,
     dateTime: dateTimeUtc,
@@ -36,6 +37,8 @@ module.exports = async (req, res) => {
   }, {
     include: [Sensor, Reading],
   })
+
+  applyRules(event)
 
   res.json({ success: true })
 }

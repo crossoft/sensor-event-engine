@@ -1,0 +1,18 @@
+{
+  "rules": [
+    {
+      "scope": {
+        "type": "temperature"
+      },
+      "condition": {
+        "type": "greaterThan",
+        "value": 0,
+        "compareWith": "value"
+      },
+      "actions": {
+        "type": "webhook",
+        "url": "https://google.com"
+      }
+    }
+  ]
+}
