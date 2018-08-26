@@ -6,12 +6,35 @@
       },
       "condition": {
         "type": "greaterThan",
-        "value": 0,
-        "compareWith": "value"
+        "threshold": 0,
+        "attribute": {
+          "name": "value"
+        }
       },
       "actions": {
         "type": "webhook",
-        "url": "https://google.com"
+        "url": "https://temperatureGreaterThanTriggered.com"
+      }
+    },
+    {
+      "scope": {
+        "type": "temperature"
+      },
+      "condition": {
+        "type": "greaterThan",
+        "threshold": 0,
+        "attribute": {
+          "name": "value",
+          "type": "percentChange",
+          "period": {
+            "value": 5,
+            "unit": "days"
+          }
+        }
+      },
+      "actions": {
+        "type": "webhook",
+        "url": "https://temperaturePercentChangeTriggered.com"
       }
     }
   ]
