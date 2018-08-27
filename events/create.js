@@ -5,7 +5,7 @@ const {
   Device,
 } = require('../db')
 const extractReadings = require('./extractReadings')
-const applyRules = require('../rules/apply')
+const checkTriggerRules = require('../rules/checkTrigger')
 
 module.exports = async (req, res) => {
   const {
@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
     include: [Sensor, Reading],
   })
 
-  applyRules(event)
+  checkTriggerRules(event)
 
   res.json({ success: true })
 }

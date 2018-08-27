@@ -1,9 +1,13 @@
-const attributeCalculators = require('./attributeCalculators')
+const calculators = require('./attribute/calculators')
 
-module.exports = (attribute, event) => {
+module.exports = (rule, event) => {
   const {
-    type = 'number',
-  } = attribute
+    condition: {
+      attribute: {
+        calculate = 'number',
+      },
+    },
+  } = rule
 
-  return attributeCalculators[type](attribute, event)
+  return calculators[calculate](rule, event)
 }

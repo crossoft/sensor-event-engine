@@ -3,16 +3,21 @@ const { Op } = require('sequelize')
 const {
   Event,
   Reading,
-} = require('../../db')
+} = require('../../../db')
 const number = require('./number')
 
-module.exports = async ({
-  period: {
-    unit,
-    value,
-  },
-  name,
-}, event) => {
+module.exports = async (rule, event) => {
+  const {
+    condition: {
+      attribute: {
+        period: {
+          unit,
+          value,
+        },
+      },
+    },
+  } = rule
+
   const comparisonEvent = await Event.findOne({
     where: {
       dateTime: {
@@ -23,5 +28,8 @@ module.exports = async ({
     include: [Reading],
   })
 
-  return ((number({ name }, event) - number({ name }, comparisonEvent)) / number({ name }, comparisonEvent)) * 100.0
+  const oldValue = number(rule, comparisonEvent)
+  const newValue = number(rule, event)
+
+  return ((newValue - oldValue) / oldValue) * 100.0
 }

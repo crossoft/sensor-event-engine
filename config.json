@@ -1,11 +1,28 @@
 {
   "rules": [
     {
-      "scope": {
-        "type": "temperature"
-      },
       "condition": {
-        "type": "greaterThan",
+        "eventType": "accelerometer",
+        "comparison": "eq",
+        "threshold": 0,
+        "periodical": true,
+        "attribute": {
+          "calculate": "count",
+          "period": {
+            "value": 5,
+            "unit": "minutes"
+          }
+        }
+      },
+      "actions": {
+        "type": "webhook",
+        "url": "https://noMessagesOverThePeriod.com"
+      }
+    },
+    {
+      "condition": {
+        "eventType": "temperature",
+        "comparison": "gt",
         "threshold": 0,
         "attribute": {
           "name": "value"
@@ -17,15 +34,13 @@
       }
     },
     {
-      "scope": {
-        "type": "temperature"
-      },
       "condition": {
-        "type": "greaterThan",
+        "eventType": "temperature",
+        "comparison": "gt",
         "threshold": 0,
         "attribute": {
           "name": "value",
-          "type": "percentChange",
+          "calculate": "percentChange",
           "period": {
             "value": 5,
             "unit": "days"

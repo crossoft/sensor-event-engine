@@ -1,10 +1,11 @@
 const _ = require('lodash')
-const config = require('../config')
-const isTriggered = require('./isTriggered')
+const { forEachSeries } = require('p-iteration')
+const matchesCondition = require('./matchesCondition')
 
-module.exports = (event) => {
-  _.each(config.rules, async (rule) => {
-    if (!await isTriggered(rule, event)) return
-    console.log('Rule triggered', rule)
+module.exports = (rules, event) => {
+  console.log('matching', rules)
+  forEachSeries(rules, async (rule) => {
+    if (!await matchesCondition(rule, event)) return
+    console.log('rule triggered', rule)
   })
 }
