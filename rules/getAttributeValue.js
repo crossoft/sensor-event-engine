@@ -1,13 +1,16 @@
-const calculators = require('./attribute/calculators')
+const _ = require('lodash')
+const aggregators = require('./aggregators')
+const getReadingValue = require('./getReadingValue')
 
 module.exports = (rule, event) => {
   const {
     condition: {
-      attribute: {
-        calculate = 'number',
-      },
+      name,
+      aggregate,
     },
   } = rule
 
-  return calculators[calculate](rule, event)
+  if (_.isEmpty(aggregate)) return getReadingValue(event, name)
+
+  return aggregators[aggregate.type](rule, event)
 }

@@ -1,18 +1,50 @@
 {
   "rules": [
     {
-      "condition": {
-        "eventType": "accelerometer",
-        "comparison": "eq",
-        "threshold": 0,
-        "periodical": true,
-        "attribute": {
-          "calculate": "count",
-          "period": {
-            "value": 5,
-            "unit": "minutes"
-          }
+      "periodical": true,
+      "scope": {
+        "event": {
+          "type": "battery"
         }
+      },
+      "condition": {
+        "value": {
+          "name": "signalStrength",
+          "aggregate": {
+            "type": "count",
+            "period": {
+              "value": 5,
+              "unit": "events"
+            }
+          }
+        },
+        "comparison": "lt",
+        "threshold": 10
+      },
+      "actions": {
+        "type": "webhook",
+        "url": "https://signalStrengthAfterEvents.com"
+      }
+    },
+    {
+      "periodical": true,
+      "scope": {
+        "event": {
+          "type": "temperature"
+        }
+      },
+      "condition": {
+        "value": {
+          "aggregate": {
+            "type": "count",
+            "period": {
+              "value": 5,
+              "unit": "minutes"
+            }
+          }
+        },
+        "comparison": "eq",
+        "threshold": 0
       },
       "actions": {
         "type": "webhook",
@@ -20,13 +52,17 @@
       }
     },
     {
-      "condition": {
-        "eventType": "temperature",
-        "comparison": "gt",
-        "threshold": 0,
-        "attribute": {
-          "name": "value"
+      "scope": {
+        "event": {
+          "type": "temperature"
         }
+      },
+      "condition": {
+        "value": {
+          "name": "temperature"
+        },
+        "comparison": "gt",
+        "threshold": 0
       },
       "actions": {
         "type": "webhook",
@@ -34,18 +70,24 @@
       }
     },
     {
-      "condition": {
-        "eventType": "temperature",
-        "comparison": "gt",
-        "threshold": 0,
-        "attribute": {
-          "name": "value",
-          "calculate": "percentChange",
-          "period": {
-            "value": 5,
-            "unit": "days"
-          }
+      "scope": {
+        "event": {
+          "type": "temperature"
         }
+      },
+      "condition": {
+        "value": {
+          "name": "temperature",
+          "aggregate": {
+            "type": "percentChange",
+            "period": {
+              "value": 5,
+              "unit": "days"
+            }
+          }
+        },
+        "comparison": "gt",
+        "threshold": 0
       },
       "actions": {
         "type": "webhook",

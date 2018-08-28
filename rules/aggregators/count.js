@@ -2,12 +2,18 @@ const moment = require('moment')
 const { Op } = require('sequelize')
 const {
   Event,
+  Reading,
 } = require('../../../db')
 
 module.exports = async ({
+  scope: {
+    event: {
+      type,
+    },
+    reading,
+  },
   condition: {
-    eventType,
-    attribute: {
+    aggregate: {
       period: {
         unit,
         value,
@@ -20,10 +26,15 @@ module.exports = async ({
       dateTime: {
         [Op.gte]: moment.utc().subtract(value, unit).format(),
       },
-      type: eventType,
+      type,
     },
+    include: [{
+      model: Reading,
+      where: reading,
+    }]
   })
 
-  console.log('final count', count)
+  console.log('count', count)
+
   return count
 }
