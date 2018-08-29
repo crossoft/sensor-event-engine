@@ -73,12 +73,9 @@ module.exports = async (rule) => {
 
   if (!name) return events.length
 
-  // console.log(_.map(_.flatMap(events, 'readings'), 'dataValues'))
   const filteredEvents = await filterSeries(events, async (event) => (
     compare(await getReadingValue(event, name), comparison, threshold)
   ))
-
-  console.log('filtered', filteredEvents)
 
   return filteredEvents.length
 }
