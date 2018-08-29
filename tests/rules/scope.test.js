@@ -76,6 +76,84 @@ describe('basic', () => {
 
     expect(cb).not.toBeCalled()
   })
+
+  describe('sensorId', () => {
+    test('should be called', async () => {
+      const sensor = await Sensor.create()
+
+      const rule = {
+        scope: {
+          event: {
+            type: 'temperature',
+          },
+          sensor: {
+            id: sensor.id,
+          },
+        },
+        condition: {
+          value: {
+            name: 'temperature'
+          },
+          comparison: 'gt',
+          threshold: 0
+        }
+      }
+
+      const event = await Event.create({
+        type: 'temperature',
+        sensorId: sensor.id,
+        readings: [{
+          name: 'temperature',
+          value: 10,
+        }],
+      }, {
+        include: [Sensor, Reading],
+      })
+
+      const cb = jest.fn()
+      await apply([rule], event, cb)
+
+      expect(cb).toBeCalledWith(rule)
+    })
+
+    test('should not be called', async () => {
+      const sensor = await Sensor.create()
+
+      const rule = {
+        scope: {
+          event: {
+            type: 'temperature',
+          },
+          sensor: {
+            id: sensor.id + 1000,
+          },
+        },
+        condition: {
+          value: {
+            name: 'temperature'
+          },
+          comparison: 'gt',
+          threshold: 0
+        }
+      }
+
+      const event = await Event.create({
+        type: 'temperature',
+        sensorId: sensor.id,
+        readings: [{
+          name: 'temperature',
+          value: 10,
+        }],
+      }, {
+        include: [Sensor, Reading],
+      })
+
+      const cb = jest.fn()
+      await apply([rule], event, cb)
+
+      expect(cb).not.toBeCalled()
+    })
+  })
 })
 
 describe('count', () => {
