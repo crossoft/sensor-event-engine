@@ -11,6 +11,11 @@ const isInScope = ({ scope = {} }, event) => (
   everySeries(_.keys(scope), async (key) => {
     if (key === 'event') return isInRecordScope(scope[key], event)
     if (key === 'sensor') return isInRecordScope(scope[key], await event.getSensor())
+    if (key === 'device') {
+      const sensor = await event.getSensor()
+      const device = await sensor.getDevice()
+      return isInRecordScope(scope[key], device)
+    }
 
     throw `Scope of ${key} is not supported`
   })

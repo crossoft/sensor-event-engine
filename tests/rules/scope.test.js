@@ -5,6 +5,7 @@ const {
   Event,
   Sensor,
   Reading,
+  Device,
 } = require('../../db')
 const apply = require('../../rules/apply')
 
@@ -126,6 +127,86 @@ describe('basic', () => {
           },
           sensor: {
             id: sensor.id + 1000,
+          },
+        },
+        condition: {
+          value: {
+            name: 'temperature'
+          },
+          comparison: 'gt',
+          threshold: 0
+        }
+      }
+
+      const event = await Event.create({
+        type: 'temperature',
+        sensorId: sensor.id,
+        readings: [{
+          name: 'temperature',
+          value: 10,
+        }],
+      }, {
+        include: [Sensor, Reading],
+      })
+
+      const cb = jest.fn()
+      await apply([rule], event, cb)
+
+      expect(cb).not.toBeCalled()
+    })
+  })
+
+  describe('deviceId', () => {
+    test('should be called', async () => {
+      const device = await Device.create()
+      const sensor = await Sensor.create({ deviceId: device.id })
+
+      const rule = {
+        scope: {
+          event: {
+            type: 'temperature',
+          },
+          device: {
+            id: device.id,
+          },
+        },
+        condition: {
+          value: {
+            name: 'temperature'
+          },
+          comparison: 'gt',
+          threshold: 0
+        }
+      }
+
+      const event = await Event.create({
+        type: 'temperature',
+        sensorId: sensor.id,
+        readings: [{
+          name: 'temperature',
+          value: 10,
+        }],
+      }, {
+        include: [Sensor, Reading],
+      })
+
+      const cb = jest.fn()
+      await apply([rule], event, cb)
+
+      expect(cb).toBeCalledWith(rule)
+    })
+
+    test('should not be called', async () => {
+      const device = await Device.create()
+      const sensor = await Sensor.create({ deviceId: device.id })
+
+      const rule = {
+        scope: {
+          event: {
+            type: 'temperature',
+          },
+          device: {
+            id: device.id + 1000,
           },
         },
         condition: {
