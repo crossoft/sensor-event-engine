@@ -1,3 +1,5 @@
+const _ = require('lodash')
+const { forEachSeries } = require('p-iteration')
 const {
   db,
   Event,
@@ -10,66 +12,156 @@ beforeEach(async () => {
   await db.sync({ force: true })
 })
 
-test('should be called', async () => {
-  const rule = {
-    scope: {
-      event: {
-        type: 'temperature',
+describe('basic', () => {
+  test('should be called', async () => {
+    const rule = {
+      scope: {
+        event: {
+          type: 'temperature',
+        },
       },
-    },
-    condition: {
-      value: {
-        name: 'temperature'
-      },
-      comparison: 'gt',
-      threshold: 0
+      condition: {
+        value: {
+          name: 'temperature'
+        },
+        comparison: 'gt',
+        threshold: 0
+      }
     }
-  }
 
-  const event = await Event.create({
-    type: 'temperature',
-    readings: [{
-      name: 'temperature',
-      value: 10,
-    }],
-  }, {
-    include: [Sensor, Reading],
+    const event = await Event.create({
+      type: 'temperature',
+      readings: [{
+        name: 'temperature',
+        value: 10,
+      }],
+    }, {
+      include: [Sensor, Reading],
+    })
+
+    const cb = jest.fn()
+    await apply([rule], event, cb)
+
+    expect(cb).toBeCalledWith(rule)
   })
 
-  const cb = jest.fn()
-  await apply([rule], event, cb)
+  test('should not be called', async () => {
+    const rule = {
+      scope: {
+        event: {
+          type: 'temperature',
+        },
+      },
+      condition: {
+        value: {
+          name: 'temperature'
+        },
+        comparison: 'gt',
+        threshold: 0
+      }
+    }
 
-  expect(cb).toBeCalledWith(rule)
+    const event = await Event.create({
+      type: 'battery',
+      readings: [{
+        name: 'temperature',
+        value: 10,
+      }],
+    }, {
+      include: [Sensor, Reading],
+    })
+
+    const cb = jest.fn()
+    await apply([rule], event, cb)
+
+    expect(cb).not.toBeCalled()
+  })
 })
 
-test('should not be called', async () => {
-  const rule = {
-    scope: {
-      event: {
-        type: 'temperature',
+describe('count', () => {
+  test('should be called', async () => {
+    const rule = {
+      scope: {
+        event: {
+          type: 'battery',
+        },
       },
-    },
-    condition: {
-      value: {
-        name: 'temperature'
+      condition: {
+        value: {
+          name: 'signalStrength',
+          aggregate: {
+            type: 'count',
+            period: {
+              value: 5,
+              unit: 'events'
+            },
+            comparison: 'lt',
+            threshold: -5
+          }
+        },
+        comparison: 'gte',
+        threshold: 5
       },
-      comparison: 'gt',
-      threshold: 0
     }
-  }
 
-  const event = await Event.create({
-    type: 'battery',
-    readings: [{
-      name: 'temperature',
-      value: 10,
-    }],
-  }, {
-    include: [Sensor, Reading],
+    await forEachSeries(_.times(5), async (n) => {
+      await Event.create({
+        type: 'battery',
+        readings: [{
+          name: 'signalStrength',
+          value: -6 * (n + 1),
+        }],
+      }, {
+        include: [Sensor, Reading],
+      })
+    })
+
+    const cb = jest.fn()
+    await apply([rule], null, cb)
+
+    expect(cb).toBeCalledWith(rule)
   })
 
-  const cb = jest.fn()
-  await apply([rule], event, cb)
+  test('should not be called', async () => {
+    const rule = {
+      scope: {
+        event: {
+          type: 'temperature',
+        },
+      },
+      condition: {
+        value: {
+          name: 'signalStrength',
+          aggregate: {
+            type: 'count',
+            period: {
+              value: 5,
+              unit: 'events'
+            },
+            comparison: 'lt',
+            threshold: -5
+          }
+        },
+        comparison: 'gte',
+        threshold: 5
+      },
+    }
 
-  expect(cb).not.toBeCalled()
+    await forEachSeries(_.times(5), async (n) => {
+      await Event.create({
+        type: 'battery',
+        readings: [{
+          name: 'signalStrength',
+          value: -6 * (n + 1),
+        }],
+      }, {
+        include: [Sensor, Reading],
+      })
+    })
+
+    const cb = jest.fn()
+    await apply([rule], null, cb)
+
+    expect(cb).not.toBeCalled()
+  })
 })
