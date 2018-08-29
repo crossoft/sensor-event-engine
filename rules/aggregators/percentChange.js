@@ -31,6 +31,8 @@ module.exports = async (rule, event) => {
     include: [Reading],
   })
 
+  if (!comparisonEvent) return 0
+
   const oldValue = await getReadingValue(comparisonEvent, name)
   const newValue = await getReadingValue(event, name)
 

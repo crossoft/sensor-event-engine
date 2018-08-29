@@ -7,7 +7,7 @@ const db = new Sequelize('db', null, null, {
   operatorsAliases: false,
   logging: process.env.SQL_LOGGING === 'false' ? false : console.log,
   pool: {
-    max: 100,
+    max: 20,
   },
 })
 
