@@ -12,6 +12,11 @@ beforeEach(async () => {
 
 test('should be called', async () => {
   const rule = {
+    scope: {
+      event: {
+        type: 'temperature',
+      },
+    },
     condition: {
       value: {
         name: 'temperature'
@@ -39,6 +44,11 @@ test('should be called', async () => {
 
 test('should not be called', async () => {
   const rule = {
+    scope: {
+      event: {
+        type: 'temperature',
+      },
+    },
     condition: {
       value: {
         name: 'temperature'
@@ -49,9 +59,10 @@ test('should not be called', async () => {
   }
 
   const event = await Event.create({
+    type: 'battery',
     readings: [{
       name: 'temperature',
-      value: -1,
+      value: 10,
     }],
   }, {
     include: [Sensor, Reading],
