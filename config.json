@@ -15,11 +15,13 @@
             "period": {
               "value": 5,
               "unit": "events"
-            }
+            },
+            "comparison": "lt",
+            "threshold": 10000
           }
         },
-        "comparison": "lt",
-        "threshold": 10
+        "comparison": "eq",
+        "threshold": 5
       },
       "actions": {
         "type": "webhook",

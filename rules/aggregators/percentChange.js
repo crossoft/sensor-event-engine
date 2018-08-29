@@ -3,16 +3,19 @@ const { Op } = require('sequelize')
 const {
   Event,
   Reading,
-} = require('../../../db')
-const number = require('./number')
+} = require('../../db')
+const getReadingValue = require('../getReadingValue')
 
 module.exports = async (rule, event) => {
   const {
     condition: {
-      attribute: {
-        period: {
-          unit,
-          value,
+      value: {
+        name,
+        aggregate: {
+          period: {
+            unit,
+            value,
+          },
         },
       },
     },
@@ -28,8 +31,8 @@ module.exports = async (rule, event) => {
     include: [Reading],
   })
 
-  const oldValue = number(rule, comparisonEvent)
-  const newValue = number(rule, event)
+  const oldValue = await getReadingValue(comparisonEvent, name)
+  const newValue = await getReadingValue(event, name)
 
   return ((newValue - oldValue) / oldValue) * 100.0
 }

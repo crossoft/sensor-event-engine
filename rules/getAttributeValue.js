@@ -5,8 +5,10 @@ const getReadingValue = require('./getReadingValue')
 module.exports = (rule, event) => {
   const {
     condition: {
-      name,
-      aggregate,
+      value: {
+        name,
+        aggregate,
+      },
     },
   } = rule
 

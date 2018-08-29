@@ -3,6 +3,6 @@ const _ = require('lodash')
 module.exports = {
   messageType: 'temperature',
   measureValues: {
-    value: _.random(-40, 50),
+    temperature: _.random(-40, 50),
   }
 }
