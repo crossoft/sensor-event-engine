@@ -9,12 +9,12 @@ const {
 const compare = require('../compare')
 const getReadingValue = require('../getReadingValue')
 
+const scopeWhere = (scope) => {
+  return _.get(scope, 'event') || {}
+}
+
 const eventsOverPeriod = ({
-  scope: {
-    event: {
-      type,
-    },
-  },
+  scope,
   condition: {
     value: {
       aggregate: {
@@ -25,7 +25,7 @@ const eventsOverPeriod = ({
 }) => (
   Event.findAll({
     where: {
-      type,
+      ...scopeWhere(scope),
       ...periodWhere(period),
     },
     ...periodLimit(period),
