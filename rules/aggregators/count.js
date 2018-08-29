@@ -5,13 +5,25 @@ const { filterSeries } = require('p-iteration')
 const {
   Event,
   Reading,
+  Sensor,
 } = require('../../db')
 const compare = require('../compare')
 const getReadingValue = require('../getReadingValue')
 
-const scopeWhere = (scope) => {
-  return _.get(scope, 'event') || {}
+const scopeWhere = (scope) => _.get(scope, 'event') || {}
+
+const getModel = (name) => {
+  if (name === 'sensor') return Sensor
+
+  throw `Missing model ${name} from scope`
 }
+
+const scopeInclude = (scope) => (
+  _.map(_.omit(scope, ['event']), (val, key) => ({
+    model: getModel(key),
+    where: val,
+  }))
+)
 
 const eventsOverPeriod = ({
   scope,
@@ -30,9 +42,7 @@ const eventsOverPeriod = ({
     },
     ...periodLimit(period),
     order: [['createdAt', 'DESC']],
-    include: [{
-      model: Reading,
-    }]
+    include: [{ model: Reading }].concat(scopeInclude(scope))
   })
 )
 
