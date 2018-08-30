@@ -16,6 +16,11 @@ const isInScope = ({ scope = {} }, event) => (
       const device = await sensor.getDevice()
       return isInRecordScope(scope[key], device)
     }
+    if (key === 'zone') {
+      const sensor = await event.getSensor()
+      const zone = await sensor.getZone()
+      return isInRecordScope(scope[key], zone)
+    }
 
     throw `Scope of ${key} is not supported`
   })

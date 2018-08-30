@@ -64,6 +64,20 @@ const Reading = db.define('reading', {
 Event.hasMany(Reading)
 Reading.belongsTo(Event)
 
+const Zone = db.define('zone', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+})
+
+Zone.hasMany(Sensor)
+Sensor.belongsTo(Zone)
+
+Sensor.hasMany(Event)
+Event.belongsTo(Sensor)
+
 db.sync()
 
 module.exports = {
@@ -71,5 +85,6 @@ module.exports = {
   Event,
   Reading,
   Device,
+  Zone,
   db,
 }

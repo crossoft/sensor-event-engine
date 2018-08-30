@@ -7,6 +7,7 @@ const {
   Reading,
   Sensor,
   Device,
+  Zone,
 } = require('../../db')
 const compare = require('../compare')
 const getReadingValue = require('../getReadingValue')
@@ -17,6 +18,7 @@ const scopeInclude = (scope) => (
   _.map(_.omit(scope, ['event']), (where, key) => {
     if (key === 'sensor') return { model: Sensor, where }
     if (key === 'device') return { model: Sensor, include: [{ model: Device, where }] }
+    if (key === 'zone') return { model: Sensor, include: [{ model: Zone, where }] }
 
     throw `Missing model ${name} from scope`
   })
