@@ -1,4 +1,28 @@
 {
+  "devices": [
+    {
+      "name": "Thermometer"
+    }
+  ],
+  "zones": [
+    {
+      "name": "Living Room"
+    }
+  ],
+  "sensors": [
+    {
+      "device": {
+        "name": "Thermometer"
+      },
+      "externalId": "external-1"
+    },
+    {
+      "zone": {
+        "name": "Thermometer"
+      },
+      "externalId": "external-1"
+    }
+  ],
   "rules": [
     {
       "periodical": true,

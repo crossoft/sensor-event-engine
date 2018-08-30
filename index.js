@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const createEvents = require('./events/create')
-const listenToPeriodicalRules = require('./rules/listenPeriodical')
+const setup = require('./setup')
 
 const app = express()
 
@@ -17,4 +17,4 @@ const opts = {
 }
 
 app.listen(port, () => console.log(`Server is running and receives POST events at localhost:${port}/events`))
-listenToPeriodicalRules()
+setup()

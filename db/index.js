@@ -17,6 +17,7 @@ const Device = db.define('device', {
     primaryKey: true,
     autoIncrement: true,
   },
+  name: Sequelize.STRING,
   createdAt: dateTimeColumn('createdAt'),
 })
 
@@ -70,6 +71,7 @@ const Zone = db.define('zone', {
     primaryKey: true,
     autoIncrement: true,
   },
+  name: Sequelize.STRING,
 })
 
 Zone.hasMany(Sensor)
