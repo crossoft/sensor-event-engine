@@ -3,8 +3,8 @@ const {
   Device,
 } = require('../db')
 
-module.exports = async ({ devices = [] }) => (
-  await forEachSeries(devices, (device) => (
+module.exports = ({ devices = [] }) => (
+  forEachSeries(devices, (device) => (
     Device.findOrCreate({
       where: device,
     })

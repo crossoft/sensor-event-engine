@@ -3,8 +3,8 @@ const {
   Zone,
 } = require('../db')
 
-module.exports = async ({ zones = [] }) => (
-  await forEachSeries(zones, (zone) => (
+module.exports = ({ zones = [] }) => (
+  forEachSeries(zones, (zone) => (
     Zone.findOrCreate({
       where: zone,
     })

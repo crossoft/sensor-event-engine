@@ -6,8 +6,8 @@ const db = new Sequelize('db', null, null, {
   storage: './db/db.sqlite',
   operatorsAliases: false,
   logging: process.env.SQL_LOGGING === 'false' ? false : console.log,
-  pool: {
-    max: 20,
+  retry: {
+    max: 10,
   },
 })
 

@@ -26,8 +26,8 @@ const zoneWhere = async ({ zone }) => {
   return { zoneId: id }
 }
 
-module.exports = async ({ sensors = [] }) => (
-  await forEachSeries(sensors, async (sensor) => {
+module.exports = ({ sensors = [] }) => (
+  forEachSeries(sensors, async (sensor) => (
     await Sensor.findOrCreate({
       where: {
         ..._.omit(sensor, ['device', 'zone']),
@@ -35,5 +35,5 @@ module.exports = async ({ sensors = [] }) => (
         ...await zoneWhere(sensor),
       },
     })
-  })
+  ))
 )

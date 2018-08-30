@@ -32,7 +32,7 @@ describe('basic', () => {
       ],
     }
 
-    await setup(config)
+    await setup({ listenToPeriodicalRules: false, config })
 
     const rule = {
       scope: {
@@ -89,7 +89,7 @@ describe('basic', () => {
       ],
     }
 
-    await setup(config)
+    await setup({ listenToPeriodicalRules: false, config })
 
     const rule = {
       scope: {
@@ -148,7 +148,7 @@ describe('count', () => {
       ],
     }
 
-    await setup(config)
+    await setup({ listenToPeriodicalRules: false, config })
 
     const rule = {
       scope: {
@@ -215,7 +215,7 @@ describe('count', () => {
       ],
     }
 
-    await setup(config)
+    await setup({ listenToPeriodicalRules: false, config })
 
     const rule = {
       scope: {

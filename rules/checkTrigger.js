@@ -4,5 +4,5 @@ const apply = require('./apply')
 const isPeriodical = require('./isPeriodical')
 
 module.exports = (event) => (
-  apply(_.reject(config.rules, isPeriodical))
+  apply(_.reject(config.rules, isPeriodical), event)
 )
