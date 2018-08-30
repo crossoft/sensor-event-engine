@@ -26,24 +26,344 @@ After starting, server handles incoming sensor messages on POST `http://localhos
 
 ## Supported events
 - `accelerometer` (`x`, `y`, `z`)
-- `battery` (`value`)
-- `humidity` (`value`)
-- `motion` (`value` - `true`/`false`)
-- `temperature` (`value`)
+- `battery` (`battery`)
+- `humidity` (`humidity`)
+- `motion` (`motion` - `true`/`false`)
+- `temperature` (`temperature`)
 
 ### Example message format
 
 ```json
 {
   "messageType":"accelerometer",
-  "measureValues": { 
+  "measureValues": {
     "x": 281.49248665547907,
     "y": 20.535517084964965,
     "z": -0.15586189463505207
   },
-  "sensorId":"1b152ff0-a791-11e8-a339-576e2b635de0",
-  "signalStrength":6,
-  "dateTimeUtc":"2018-08-24T11:30:30Z"
+  "sensorId": "1b152ff0-a791-11e8-a339-576e2b635de0",
+  "signalStrength": 6,
+  "dateTimeUtc": "2018-08-24T11:30:30Z"
+}
+```
+
+## Config
+
+### Rules
+
+You can setup rules that trigger if certain conditions of events
+(or lack of them) are met.
+
+NOTE: Actions/outcomes are not done yet.
+
+The setup is done in `config.json`.
+
+This is a simple example which triggers when temperature sensor gets
+higher than 15:
+```json
+{
+  "rules": [
+    {
+      "scope": {
+        "event": {
+          "type": "temperature"
+        }
+      },
+      "condition": {
+        "value": {
+          "name": "temperature"
+        },
+        "comparison": "gt",
+        "threshold": 15
+      }
+    }
+  ]
+}
+```
+
+### Scope
+
+You can scope rules so they are only triggered on certain types of
+events/zones/devices. Scope also influcences how `count` aggregation is
+calculated. See `aggregate`.
+
+#### event -> type
+
+`event -> type` here corresponds to the `messageType` in the registered event.
+
+```json
+{
+  "rules": [
+    {
+      "scope": {
+        "event": {
+          "type": "temperature"
+        }
+      },
+      "condition": {
+        "value": {
+          "name": "temperature"
+        },
+        "comparison": "gt",
+        "threshold": 15
+      }
+    }
+  ]
+}
+```
+
+Possible values for `event -> type`:
+- `accelerometer`
+- `battery`
+- `humidity`
+- `motion`
+- `temperature`
+
+#### sensor -> externalId
+
+Can set up so if you know `sensorId` that is sent from the external device
+(the `"sensorId": "1b152ff0-a791-11e8-a339-576e2b635de0"` part).
+
+```json
+{
+  "rules": [
+    {
+      "scope": {
+        "sensor": {
+          "externalId": "1b152ff0-a791-11e8-a339-576e2b635de0"
+        }
+      }
+    }
+  ]
+}
+```
+
+#### zone -> name
+
+See how to setup zones below.
+
+```json
+{
+  "rules": [
+    {
+      "scope": {
+        "zone": {
+          "name": "Living Room"
+        }
+      }
+    }
+  ]
+}
+```
+
+#### device -> name
+
+See how to setup devices below.
+
+```json
+{
+  "rules": [
+    {
+      "scope": {
+        "device": {
+          "name": "Thermometer 1"
+        }
+      }
+    }
+  ]
+}
+```
+
+### Zones
+
+You can set up zones in the config and then reference them in scope of rules.
+
+```json
+{
+  "zones": [
+    {
+      "name": "Living Room"
+    }
+  ],
+  "rules": [
+    {
+      "scope": {
+        "zone": {
+          "name": "Living Room"
+        }
+      }
+    }
+  ]
+}
+```
+
+### Devices
+
+Just like with zones, you can setup devices the same way.
+
+```json
+{
+  "devices": [
+    {
+      "name": "Thermometer 1"
+    }
+  ],
+  "rules": [
+    {
+      "scope": {
+        "device": {
+          "name": "Thermometer 1"
+        }
+      }
+    }
+  ]
+}
+```
+
+### Condition
+
+`condition` in a rule decides whether the actual data engages the trigger.
+
+```json
+{
+  "rules": [
+    {
+      "condition": {
+        "value": {
+          "name": "temperature"
+        },
+        "comparison": "gt",
+        "threshold": 15
+      }
+    }
+  ]
+}
+```
+
+#### `value`
+
+`condition -> value` calculates the value which will be compared to the `threshold`.
+
+`name` here is the name of the `measureValues` key. Depending on the sensor, it
+can be:
+- `temperature`
+- `x`
+- `y`
+- `z`
+- `battery`
+- `humidity`
+- `motion`
+
+#### `comparison`
+
+Decides how to compare `value` to the `threshold`.
+
+Available values:
+- `eq` (equals)
+- `gt` (greater than)
+- `gte` (greater than or equals)
+- `lt` (lower than)
+- `lte` (lower than or equals)
+
+#### `aggregate`
+
+To calculate `percentChange` and `count` of multiple events you need to use
+`aggregate`.
+
+##### `percentChange`
+
+This triggers when the temperature percent change between recent event and
+an same event 5 hours ago is greater than 50%:
+```json
+{
+  "condition": {
+    "value": {
+      "name": "temperature",
+      "aggregate": {
+        "type": "percentChange",
+        "period": {
+          "value": 5,
+          "unit": "hours"
+        }
+      }
+    },
+    "comparison": "gt",
+    "threshold": 50
+  }
+}
+```
+
+Available `period -> unit` types:
+- `seconds`
+- `minutes`
+- `hours`
+- `days`
+- `events`
+
+##### `count`
+
+Count is used to count values with certain criteria.
+
+This triggers when `signalStrength` from a `accelerator` was lower than 20
+over the last 5 registered events:
+```json
+{
+  "scope": {
+    "event": {
+      "type": "accelerator"
+    }
+  },
+  "condition": {
+    "value": {
+      "name": "signalStrength",
+      "aggregate": {
+        "type": "count",
+        "period": {
+          "value": 5,
+          "unit": "events"
+        },
+        "comparison": "lt",
+        "threshold": 20,
+      }
+    },
+    "comparison": "eq",
+    "threshold": 5
+  }
+}
+```
+
+Note that both `threshold` and `period -> value` are 5, so it checks if 5 == 5.
+
+##### `periodical`
+
+When you want to setup triggers for absence of events, you need to specify
+`periodical: true` on the rule so it would check for it periodically. It checks
+for periodical rules every 2 minutes.
+
+This triggers when any sensor with type `temperature` sends no (0) events over the
+last 30 minutes.
+
+```json
+{
+  "periodical": true,
+  "scope": {
+    "event": {
+      "type": "temperature"
+    }
+  },
+  "condition": {
+    "value": {
+      "aggregate": {
+        "type": "count",
+        "period": {
+          "value": 30,
+          "unit": "minutes"
+        }
+      }
+    },
+    "comparison": "eq",
+    "threshold": 0
+  }
 }
 ```
 
@@ -107,4 +427,11 @@ yarn show devices
 ├────┼──────────────────────────────────────────┼──────────────────────────────────────────┤
 │ 2  │ Fri Aug 24 2018 15:18:59 GMT+0300 (EEST) │ Fri Aug 24 2018 15:18:59 GMT+0300 (EEST) │
 └────┴──────────────────────────────────────────┴──────────────────────────────────────────┘
+```
+
+## Tests
+
+There are automated tests that test rules and scopes. Run them with:
+```
+yarn test
 ```

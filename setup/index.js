@@ -9,6 +9,4 @@ module.exports = async ({ listenToPeriodicalRules = true, config = defaultConfig
   await setupZones(config)
   await setupSensors(config)
   if (listenToPeriodicalRules) listenToPeriodicalRulesFn()
-
-  console.log('Setup finished.')
 }
