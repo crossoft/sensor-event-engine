@@ -1,11 +1,12 @@
 const setupDevices = require('./devices')
 const setupZones = require('./zones')
-const listenToPeriodicalRules = require('../rules/listenPeriodical')
+const setupSensors = require('./sensors')
+const defaultConfig = require('../config')
 
-module.exports = async () => {
-  await setupDevices()
-  await setupZones()
-  await listenToPeriodicalRules()
+module.exports = async (config = defaultConfig) => {
+  await setupDevices(config)
+  await setupZones(config)
+  await setupSensors(config)
 
   console.log('Setup finished.')
 }

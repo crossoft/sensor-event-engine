@@ -1,11 +1,10 @@
 const { forEachSeries } = require('p-iteration')
-const config = require('../config')
 const {
   Device,
 } = require('../db')
 
-module.exports = async () => (
-  await forEachSeries(config.devices, (device) => (
+module.exports = async ({ devices = [] }) => (
+  await forEachSeries(devices, (device) => (
     Device.findOrCreate({
       where: device,
     })

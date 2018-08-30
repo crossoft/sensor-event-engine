@@ -14,11 +14,15 @@ const isInScope = ({ scope = {} }, event) => (
     if (key === 'device') {
       const sensor = await event.getSensor()
       const device = await sensor.getDevice()
+      if (!device) return false
+
       return isInRecordScope(scope[key], device)
     }
     if (key === 'zone') {
       const sensor = await event.getSensor()
       const zone = await sensor.getZone()
+      if (!zone) return false
+
       return isInRecordScope(scope[key], zone)
     }
 
