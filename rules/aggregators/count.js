@@ -6,23 +6,20 @@ const {
   Event,
   Reading,
   Sensor,
+  Device,
 } = require('../../db')
 const compare = require('../compare')
 const getReadingValue = require('../getReadingValue')
 
 const scopeWhere = (scope) => _.get(scope, 'event') || {}
 
-const getModel = (name) => {
-  if (name === 'sensor') return Sensor
-
-  throw `Missing model ${name} from scope`
-}
-
 const scopeInclude = (scope) => (
-  _.map(_.omit(scope, ['event']), (val, key) => ({
-    model: getModel(key),
-    where: val,
-  }))
+  _.map(_.omit(scope, ['event']), (where, key) => {
+    if (key === 'sensor') return { model: Sensor, where }
+    if (key === 'device') return { model: Sensor, include: [{ model: Device, where }] }
+
+    throw `Missing model ${name} from scope`
+  })
 )
 
 const eventsOverPeriod = ({
