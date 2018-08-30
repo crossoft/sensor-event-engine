@@ -19,6 +19,7 @@
     "node-fetch": "^2.2.0",
     "p-iteration": "^1.1.7",
     "sequelize": "^4.38.0",
+    "sha1": "^1.1.1",
     "sqlite3": "^4.0.2",
     "uuid": "^3.3.2"
   },

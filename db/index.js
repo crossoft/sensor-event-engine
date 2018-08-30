@@ -80,6 +80,15 @@ Sensor.belongsTo(Zone)
 Sensor.hasMany(Event)
 Event.belongsTo(Sensor)
 
+const Trigger = db.define('trigger', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  rule: Sequelize.STRING,
+})
+
 db.sync()
 
 module.exports = {
@@ -88,5 +97,6 @@ module.exports = {
   Reading,
   Device,
   Zone,
+  Trigger,
   db,
 }
