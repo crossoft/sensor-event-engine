@@ -5,7 +5,7 @@ const {
   Event,
   Sensor,
   Reading,
-  Device,
+  Zone,
 } = require('../../db')
 const setup = require('../../setup')
 const apply = require('../../rules/apply')
@@ -17,15 +17,15 @@ beforeEach(async () => {
 describe('basic', () => {
   test('should be called', async () => {
     const config = {
-      devices: [
+      zones: [
         {
-          name: 'Thermometer 1'
+          name: 'Living Room'
         }
       ],
       sensors: [
         {
-          device: {
-            name: 'Thermometer 1'
+          zone: {
+            name: 'Living Room'
           },
           externalId: 'external-1'
         },
@@ -36,8 +36,8 @@ describe('basic', () => {
 
     const rule = {
       scope: {
-        device: {
-          name: 'Thermometer 1',
+        zone: {
+          name: 'Living Room',
         },
       },
       condition: {
@@ -74,15 +74,15 @@ describe('basic', () => {
 
   test('should not be called', async () => {
     const config = {
-      devices: [
+      zones: [
         {
-          name: 'Thermometer 1'
+          name: 'Living Room'
         }
       ],
       sensors: [
         {
-          device: {
-            name: 'Thermometer 1'
+          zone: {
+            name: 'Living Room'
           },
           externalId: 'external-1'
         },
@@ -93,8 +93,8 @@ describe('basic', () => {
 
     const rule = {
       scope: {
-        device: {
-          name: 'Thermometer 1',
+        zone: {
+          name: 'Living Room',
         },
       },
       condition: {
@@ -133,15 +133,15 @@ describe('basic', () => {
 describe('count', () => {
   test('should be called', async () => {
     const config = {
-      devices: [
+      zones: [
         {
-          name: 'Thermometer 1'
+          name: 'Living Room'
         }
       ],
       sensors: [
         {
-          device: {
-            name: 'Thermometer 1'
+          zone: {
+            name: 'Living Room'
           },
           externalId: 'external-1'
         },
@@ -152,8 +152,8 @@ describe('count', () => {
 
     const rule = {
       scope: {
-        device: {
-          name: 'Thermometer 1',
+        zone: {
+          name: 'Living Room',
         },
       },
       condition: {
@@ -200,15 +200,15 @@ describe('count', () => {
 
   test('should not be called', async () => {
     const config = {
-      devices: [
+      zones: [
         {
-          name: 'Thermometer 1'
+          name: 'Living Room'
         }
       ],
       sensors: [
         {
-          device: {
-            name: 'Thermometer 1'
+          zone: {
+            name: 'Living Room'
           },
           externalId: 'external-1'
         },
@@ -219,8 +219,8 @@ describe('count', () => {
 
     const rule = {
       scope: {
-        device: {
-          name: 'Thermometer 1',
+        zone: {
+          name: 'Living Room',
         },
       },
       condition: {
