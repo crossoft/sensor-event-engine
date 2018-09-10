@@ -6,8 +6,8 @@ const db = new Sequelize('db', null, null, {
   storage: './db/db.sqlite',
   operatorsAliases: false,
   logging: process.env.SQL_LOGGING === 'false' ? false : console.log,
-  pool: {
-    max: 100,
+  retry: {
+    max: 10,
   },
 })
 
@@ -17,6 +17,7 @@ const Device = db.define('device', {
     primaryKey: true,
     autoIncrement: true,
   },
+  name: Sequelize.STRING,
   createdAt: dateTimeColumn('createdAt'),
 })
 
@@ -64,6 +65,30 @@ const Reading = db.define('reading', {
 Event.hasMany(Reading)
 Reading.belongsTo(Event)
 
+const Zone = db.define('zone', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  name: Sequelize.STRING,
+})
+
+Zone.hasMany(Sensor)
+Sensor.belongsTo(Zone)
+
+Sensor.hasMany(Event)
+Event.belongsTo(Sensor)
+
+const Trigger = db.define('trigger', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  rule: Sequelize.STRING,
+})
+
 db.sync()
 
 module.exports = {
@@ -71,5 +96,7 @@ module.exports = {
   Event,
   Reading,
   Device,
+  Zone,
+  Trigger,
   db,
 }

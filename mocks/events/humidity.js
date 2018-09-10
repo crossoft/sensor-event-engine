@@ -3,6 +3,6 @@ const _ = require('lodash')
 module.exports = {
   messageType: 'humidity',
   measureValues: {
-    value: _.random(0, 100),
+    humidity: _.random(0, 100),
   }
 }

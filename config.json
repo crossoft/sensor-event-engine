@@ -1,0 +1,124 @@
+{
+  "devices": [
+    {
+      "name": "Thermometer"
+    }
+  ],
+  "zones": [
+    {
+      "name": "Living Room"
+    }
+  ],
+  "sensors": [
+    {
+      "device": {
+        "name": "Thermometer"
+      },
+      "externalId": "external-1"
+    },
+    {
+      "zone": {
+        "name": "Living Room"
+      },
+      "externalId": "external-1"
+    }
+  ],
+  "rules": [
+    {
+      "periodical": true,
+      "scope": {
+        "event": {
+          "type": "battery"
+        }
+      },
+      "condition": {
+        "value": {
+          "name": "signalStrength",
+          "aggregate": {
+            "type": "count",
+            "period": {
+              "value": 5,
+              "unit": "events"
+            },
+            "comparison": "lt",
+            "threshold": 10000
+          }
+        },
+        "comparison": "eq",
+        "threshold": 5
+      },
+      "actions": {
+        "type": "webhook",
+        "url": "https://signalStrengthAfterEvents.com"
+      }
+    },
+    {
+      "periodical": true,
+      "scope": {
+        "event": {
+          "type": "temperature"
+        }
+      },
+      "condition": {
+        "value": {
+          "aggregate": {
+            "type": "count",
+            "period": {
+              "value": 5,
+              "unit": "minutes"
+            }
+          }
+        },
+        "comparison": "eq",
+        "threshold": 0
+      },
+      "actions": {
+        "type": "webhook",
+        "url": "https://noMessagesOverThePeriod.com"
+      }
+    },
+    {
+      "scope": {
+        "event": {
+          "type": "temperature"
+        }
+      },
+      "condition": {
+        "value": {
+          "name": "temperature"
+        },
+        "comparison": "gt",
+        "threshold": 0
+      },
+      "actions": {
+        "type": "webhook",
+        "url": "https://temperatureGreaterThanTriggered.com"
+      }
+    },
+    {
+      "scope": {
+        "event": {
+          "type": "temperature"
+        }
+      },
+      "condition": {
+        "value": {
+          "name": "temperature",
+          "aggregate": {
+            "type": "percentChange",
+            "period": {
+              "value": 5,
+              "unit": "days"
+            }
+          }
+        },
+        "comparison": "gt",
+        "threshold": 0
+      },
+      "actions": {
+        "type": "webhook",
+        "url": "https://temperaturePercentChangeTriggered.com"
+      }
+    }
+  ]
+}
