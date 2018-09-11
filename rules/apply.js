@@ -33,25 +33,20 @@ const removeTrigger = (rule) => (
   })
 )
 
-const triggerFromRule = (rule, event) => {
-  const action = actions[_.get(rule, 'action.type')]
-  if (!action) return null
-
-  return action(rule, event)
-}
+const act = (config, rule, event) => actions[config.type](config, rule, event)
 
 const handleTrigger = (rule, event, defaultTrigger) => {
-  const trigger = triggerFromRule(rule)
-  if (!trigger) return defaultTrigger(rule)
+  const configs = rule.actions || []
+  if (_.isEmpty(configs)) return defaultTrigger(rule)
 
-  return trigger(rule, event)
+  forEachSeries(configs, (config) => act(config, rule, event))
 }
 
 const handleMatch = async (rule, event, defaultTrigger) => {
   if (await alreadyTriggered(rule)) return
 
-  handleTrigger(rule, event, defaultTrigger)
   await createTrigger(rule)
+  handleTrigger(rule, event, defaultTrigger)
 }
 
 const handleNoMatch = (rule) => removeTrigger(rule)

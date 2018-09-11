@@ -47,10 +47,12 @@
         "comparison": "eq",
         "threshold": 5
       },
-      "action": {
-        "type": "webhook",
-        "url": "https://signalStrengthAfterEvents.com"
-      }
+      "actions": [
+        {
+          "type": "webhook",
+          "url": "https://signalStrengthAfterEvents.com"
+        }
+      ]
     },
     {
       "periodical": true,
@@ -72,10 +74,12 @@
         "comparison": "eq",
         "threshold": 0
       },
-      "action": {
-        "type": "webhook",
-        "url": "https://noMessagesOverThePeriod.com"
-      }
+      "actions": [
+        {
+          "type": "webhook",
+          "url": "https://noMessagesOverThePeriod.com"
+        }
+      ]
     },
     {
       "scope": {
@@ -90,10 +94,12 @@
         "comparison": "gt",
         "threshold": 0
       },
-      "action": {
-        "type": "webhook",
-        "url": "https://temperatureGreaterThanTriggered.com"
-      }
+      "actions": [
+        {
+          "type": "webhook",
+          "url": "https://temperatureGreaterThanTriggered.com"
+        }
+      ]
     },
     {
       "scope": {
@@ -115,10 +121,12 @@
         "comparison": "gt",
         "threshold": 0
       },
-      "action": {
-        "type": "webhook",
-        "url": "https://temperaturePercentChangeTriggered.com"
-      }
+      "actions": [
+        {
+          "type": "webhook",
+          "url": "https://temperaturePercentChangeTriggered.com"
+        }
+      ]
     }
   ]
 }
