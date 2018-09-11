@@ -430,7 +430,7 @@ Supported options:
 - `from` - FROM email field (required)
 - `subject` - email subject
 - `text` - email body
-- `recipients` - an array of email recipients (required, example: `["john@example.com", "peter@example.com"])
+- `recipients` - an array of email recipients (required, example: `["john@example.com", "peter@example.com"]`)
 
 ## Testing & Mocking CLI
 
