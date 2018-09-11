@@ -20,6 +20,7 @@
     "p-iteration": "^1.1.7",
     "sequelize": "^4.38.0",
     "sha1": "^1.1.1",
+    "sparkpost": "^2.1.2",
     "sqlite3": "^4.0.2",
     "uuid": "^3.3.2"
   },

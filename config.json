@@ -96,8 +96,12 @@
       },
       "actions": [
         {
-          "type": "webhook",
-          "url": "https://temperatureGreaterThanTriggered.com"
+          "type": "email",
+          "sparkPostApiKey": "key",
+          "from": "sensoreventsengine@example.com",
+          "recipients": ["john.doe@example.com"],
+          "subject": "Temperature is greater",
+          "text": "Temperature got higher!"
         }
       ]
     },
