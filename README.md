@@ -54,8 +54,6 @@ After starting, server handles incoming sensor messages on POST `http://localhos
 You can setup rules that trigger if certain conditions of events
 (or lack of them) are met.
 
-NOTE: Actions/outcomes are not done yet.
-
 The setup is done in `config.json`.
 
 This is a simple example which triggers when temperature sensor gets
@@ -75,7 +73,13 @@ higher than 15:
         },
         "comparison": "gt",
         "threshold": 15
-      }
+      },
+      "actions": [
+        {
+          "type": "webhook",
+          "url": "https://example.com"
+        }
+      ]
     }
   ]
 }
@@ -366,6 +370,67 @@ last 30 minutes.
   }
 }
 ```
+
+### Actions
+
+`actions` is an array of actions that will be executed when the rule is
+triggered.
+
+```json
+{
+  "rules": [
+    {
+      "condition": {
+        "value": {
+          "name": "temperature"
+        },
+        "comparison": "gt",
+        "threshold": 15
+      },
+      "actions": [
+        {
+          "type": "webhook",
+          "url": "https://example.com"
+        },
+        {
+          "type": "email",
+          "sparkPostApiKey": "123",
+          "from": "bot@sensoreventengine.com",
+          "recipients": ["john.doe@example.com"],
+          "subject": "Rule triggered",
+          "text": "Temperature is higher than 15",
+        },
+      ]
+    }
+  ]
+}
+```
+
+There are two supported action types:
+- `webhook`
+- `email`
+
+#### `webhook`
+
+Will send out a request to a `url`. The request body will include:
+- `rule` object
+- Serialized `Event` object (if applicable)
+
+Supported options:
+- `url` - url for the request (required)
+- `method` - can be `GET`, `POST` etc. (default `POST`)
+- `headers` - can add headers for authorization, etc. (default `{ 'Content-Type': 'application/json' }`)
+
+#### `email`
+
+Will send out emails to `recipients`.
+
+Supported options:
+- `sparkPostApiKey` - SparkPost API Key (required)
+- `from` - FROM email field (required)
+- `subject` - email subject
+- `text` - email body
+- `recipients` - an array of email recipients (required, example: `["john@example.com", "peter@example.com"])
 
 ## Testing & Mocking CLI
 
