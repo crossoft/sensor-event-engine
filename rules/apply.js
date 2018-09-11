@@ -5,8 +5,9 @@ const matchesCondition = require('./matchesCondition')
 const {
   Trigger,
 } = require('../db')
+const actions = require('../actions')
 
-const defaultTrigger = (rule) => {
+const defaultTriggerFn = (rule) => {
   console.log('Rule triggered:', rule)
 }
 
@@ -32,20 +33,33 @@ const removeTrigger = (rule) => (
   })
 )
 
-const handleMatch = async (rule, trigger) => {
+const triggerFromRule = (rule, event) => {
+  const action = actions[_.get(rule, 'action.type')]
+  if (!action) return null
+
+  return action(rule, event)
+}
+
+const handleTrigger = (rule, event, defaultTrigger) => {
+  const trigger = triggerFromRule(rule)
+  if (!trigger) return defaultTrigger(rule)
+
+  return trigger(rule, event)
+}
+
+const handleMatch = async (rule, event, defaultTrigger) => {
   if (await alreadyTriggered(rule)) return
 
-  trigger(rule)
-
+  handleTrigger(rule, event, defaultTrigger)
   await createTrigger(rule)
 }
 
 const handleNoMatch = (rule) => removeTrigger(rule)
 
-module.exports = (rules, event, trigger = defaultTrigger) => (
+module.exports = (rules, event, defaultTrigger = defaultTriggerFn) => (
   forEachSeries(rules, async (rule) => {
     if (await matchesCondition(rule, event)) {
-      await handleMatch(rule, trigger)
+      await handleMatch(rule, event, defaultTrigger)
     } else {
       await handleNoMatch(rule)
     }
