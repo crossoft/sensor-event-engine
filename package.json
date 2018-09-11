@@ -7,7 +7,7 @@
     "start": "node index.js",
     "mock": "SQL_LOGGING=false node cli/index.js mock",
     "show": "SQL_LOGGING=false node cli/index.js show",
-    "test": "SQL_LOGGING=false yarn jest"
+    "test": "CONSOLE_LOGGING=false SQL_LOGGING=false yarn jest"
   },
   "dependencies": {
     "body-parser": "^1.18.3",

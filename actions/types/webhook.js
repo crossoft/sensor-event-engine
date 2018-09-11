@@ -5,7 +5,9 @@ module.exports = ({
   method = 'POST',
   headers = { 'Content-Type': 'application/json' },
 }, rule, event) => {
-  console.log('Executing webhook for rule:', rule)
+  if (process.env.CONSOLE_LOGGING !== 'false') {
+    console.log('Executing webhook for rule:', rule)
+  }
 
   fetch(url, {
     method,

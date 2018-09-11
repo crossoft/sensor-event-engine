@@ -8,7 +8,9 @@ module.exports = ({
   text,
   recipients,
 }, rule, event) => {
-  console.log('Sending email for rule:', rule)
+  if (process.env.CONSOLE_LOGGING !== 'false') {
+    console.log('Sending email for rule:', rule)
+  }
 
   const client = new SparkPost(sparkPostApiKey)
   const serialize = (emails) => (
