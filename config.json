@@ -47,10 +47,12 @@
         "comparison": "eq",
         "threshold": 5
       },
-      "actions": {
-        "type": "webhook",
-        "url": "https://signalStrengthAfterEvents.com"
-      }
+      "actions": [
+        {
+          "type": "webhook",
+          "url": "https://signalStrengthAfterEvents.com"
+        }
+      ]
     },
     {
       "periodical": true,
@@ -72,10 +74,12 @@
         "comparison": "eq",
         "threshold": 0
       },
-      "actions": {
-        "type": "webhook",
-        "url": "https://noMessagesOverThePeriod.com"
-      }
+      "actions": [
+        {
+          "type": "webhook",
+          "url": "https://noMessagesOverThePeriod.com"
+        }
+      ]
     },
     {
       "scope": {
@@ -90,10 +94,16 @@
         "comparison": "gt",
         "threshold": 0
       },
-      "actions": {
-        "type": "webhook",
-        "url": "https://temperatureGreaterThanTriggered.com"
-      }
+      "actions": [
+        {
+          "type": "email",
+          "sparkPostApiKey": "key",
+          "from": "sensoreventsengine@example.com",
+          "recipients": ["john.doe@example.com"],
+          "subject": "Temperature is greater",
+          "text": "Temperature got higher!"
+        }
+      ]
     },
     {
       "scope": {
@@ -115,10 +125,12 @@
         "comparison": "gt",
         "threshold": 0
       },
-      "actions": {
-        "type": "webhook",
-        "url": "https://temperaturePercentChangeTriggered.com"
-      }
+      "actions": [
+        {
+          "type": "webhook",
+          "url": "https://temperaturePercentChangeTriggered.com"
+        }
+      ]
     }
   ]
 }

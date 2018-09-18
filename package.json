@@ -7,7 +7,7 @@
     "start": "node index.js",
     "mock": "SQL_LOGGING=false node cli/index.js mock",
     "show": "SQL_LOGGING=false node cli/index.js show",
-    "test": "SQL_LOGGING=false yarn jest"
+    "test": "CONSOLE_LOGGING=false SQL_LOGGING=false yarn jest"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -20,6 +20,7 @@
     "p-iteration": "^1.1.7",
     "sequelize": "^4.38.0",
     "sha1": "^1.1.1",
+    "sparkpost": "^2.1.2",
     "sqlite3": "^4.0.2",
     "uuid": "^3.3.2"
   },
