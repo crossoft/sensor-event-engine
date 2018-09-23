@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "mock": "SQL_LOGGING=false node cli/index.js mock",
-    "simulate": "SQL_LOGGING=false node cli/index.js simulate",
+    "simulate-temperature-spike": "SQL_LOGGING=false node cli/index.js simulate-temperature-spike",
+    "simulate-temperature-crater": "SQL_LOGGING=false node cli/index.js simulate-temperature-crater",
     "show": "SQL_LOGGING=false node cli/index.js show",
     "test": "CONSOLE_LOGGING=false SQL_LOGGING=false yarn jest"
   },

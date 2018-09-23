@@ -3,20 +3,29 @@ const mockEvent = require('../mocks/mockEvent')
 const showEvents = require('./showEvents')
 const showSensors = require('./showSensors')
 const showDevices = require('./showDevices')
-const simulateTemperatureSpikes = require('../simulate/temperatureSpikes')
+const simulateTemperatureSpike = require('../simulate/temperatureSpike')
 
 program
   .command('mock <eventType>')
   .action(mockEvent)
 
 program
-  .command('simulate temperature-spikes')
-  .option('--function <function>', 'how fast the values should change', 'parabola')
-  .option('--min <value>', 'valley value', 25)
-  .option('--max <value>', 'peak value', 40)
-  .option('--peak <minutes>', 'duration at peaks', 1)
-  .option('--valley <minutes>', 'duration at valleys', 1)
-  .action(simulateTemperatureSpikes)
+  .command('simulate-temperature-spike')
+  .option('--function <function>', 'value change function', 'parabola')
+  .option('--normal-value <value>', 'normal value', 25)
+  .option('--normal-duration <minutes>', 'duration before the peak', 1)
+  .option('--peak-value <value>', 'peak value', 40)
+  .option('--peak-duration <minutes>', 'duration in peak', 1)
+  .action(simulateTemperatureSpike)
+
+program
+  .command('simulate-temperature-crater')
+  .option('--function <function>', 'value change function', 'parabola')
+  .option('--normal-value <value>', 'normal value', 25)
+  .option('--normal-duration <minutes>', 'duration before the peak', 1)
+  .option('--peak-value <value>', 'peak value', -10)
+  .option('--peak-duration <minutes>', 'duration in peak', 1)
+  .action(simulateTemperatureSpike)
 
 program
   .command('show <type>')

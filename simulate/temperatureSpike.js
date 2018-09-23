@@ -5,24 +5,30 @@ const sleep = require('sleep-promise')
 const uuidv1 = require('uuid/v1')
 const mockEvent = require('../mocks/mockEvent')
 
-module.exports = async (eventType, { min, max, peak, valley }) => {
+module.exports = async ({ normalValue, normalDuration, peakValue, peakDuration }) => {
   const stepsMovementCount = 3
-  const stepSize = (max - min) / stepsMovementCount
+  const stepSize = (peakValue - normalValue) / stepsMovementCount
 
   const steps = _.flatten([
     _.times(stepsMovementCount, (n) => ({
-      value: min + n * stepSize,
-      duration: valley / stepsMovementCount,
+      value: normalValue + n * stepSize,
+      duration: normalDuration / stepsMovementCount,
     })),
     {
-      value: max,
-      duration: peak,
+      value: peakValue,
+      duration: peakDuration,
     },
     _.times(stepsMovementCount, (n) => ({
-      value: max - (n + 1) * stepSize,
-      duration: valley / stepsMovementCount,
+      value: peakValue - (n + 1) * stepSize,
+      duration: normalDuration / stepsMovementCount,
     })),
   ])
+
+  console.log('> Simulation plan:')
+  _.each(steps, ({ value, duration }) => {
+    console.log(`| Temperature event: ${_.round(value, 1)}; Wait ${_.round(duration, 1)}mins`)
+  })
+  console.log('> Executing...')
 
   const sensorId = process.env.MOCK_EXTERNAL_ID || uuidv1()
 
@@ -35,7 +41,7 @@ module.exports = async (eventType, { min, max, peak, valley }) => {
     })
 
     const milliseconds = moment.duration(duration, 'minutes').as('milliseconds')
-    console.log(`Waiting for ${duration} minutes (${milliseconds} milliseconds)`)
+    console.log(`> Waiting for ${_.round(duration, 1)} minutes...`)
     await sleep(milliseconds)
   })
 }
