@@ -12,6 +12,7 @@
     "simulate-temperature-steady-gain": "SQL_LOGGING=false node cli/index.js simulate --event-type temperature --peak-value 50",
     "simulate-temperature-steady-drop": "SQL_LOGGING=false node cli/index.js simulate --event-type temperature --peak-value='-10'",
     "simulate-humidity-steady-gain": "SQL_LOGGING=false node cli/index.js simulate --event-type humidity --peak-value 50",
+    "simulate-humidity-steady-drop": "SQL_LOGGING=false node cli/index.js simulate --event-type humidity --peak-value=0",
     "show": "SQL_LOGGING=false node cli/index.js show",
     "test": "CONSOLE_LOGGING=false SQL_LOGGING=false yarn jest"
   },
