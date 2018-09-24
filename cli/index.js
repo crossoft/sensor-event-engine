@@ -11,7 +11,7 @@ program
 
 program
   .command('simulate-temperature-spike')
-  .option('--function <function>', 'value change function', 'parabola')
+  .option('--change-function <function>', 'value change function', 'parabola')
   .option('--normal-value <value>', 'normal value', 25)
   .option('--normal-duration <minutes>', 'duration before the peak', 1)
   .option('--peak-value <value>', 'peak value', 40)
@@ -20,7 +20,7 @@ program
 
 program
   .command('simulate-temperature-crater')
-  .option('--function <function>', 'value change function', 'parabola')
+  .option('--change-function <function>', 'value change function', 'parabola')
   .option('--normal-value <value>', 'normal value', 25)
   .option('--normal-duration <minutes>', 'duration before the peak', 1)
   .option('--peak-value <value>', 'peak value', -10)

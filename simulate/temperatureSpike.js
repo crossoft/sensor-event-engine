@@ -5,22 +5,41 @@ const sleep = require('sleep-promise')
 const uuidv1 = require('uuid/v1')
 const mockEvent = require('../mocks/mockEvent')
 
-module.exports = async ({ normalValue, normalDuration, peakValue, peakDuration }) => {
-  const stepsMovementCount = 3
-  const stepSize = (peakValue - normalValue) / stepsMovementCount
+const STEPS_TILL_PEAK = 3
+
+const stepSize = (normalValue, peakValue) => (
+  (peakValue - normalValue) / STEPS_TILL_PEAK
+)
+
+const getNormalValue = (n, isBeforePeak, { changeFunction, normalValue, peakValue }) => {
+  if (changeFunction === 'abrupt') return normalValue
+
+  if (isBeforePeak) {
+    return normalValue + n * stepSize(normalValue, peakValue)
+  } else {
+    return peakValue - (n + 1) * stepSize(normalValue, peakValue)
+  }
+}
+
+module.exports = async (opts) => {
+  const {
+    normalDuration,
+    peakValue,
+    peakDuration,
+  } = opts
 
   const steps = _.flatten([
-    _.times(stepsMovementCount, (n) => ({
-      value: normalValue + n * stepSize,
-      duration: normalDuration / stepsMovementCount,
+    _.times(STEPS_TILL_PEAK, (n) => ({
+      value: getNormalValue(n, false, opts),
+      duration: normalDuration / STEPS_TILL_PEAK,
     })),
     {
       value: peakValue,
       duration: peakDuration,
     },
-    _.times(stepsMovementCount, (n) => ({
-      value: peakValue - (n + 1) * stepSize,
-      duration: normalDuration / stepsMovementCount,
+    _.times(STEPS_TILL_PEAK, (n) => ({
+      value: getNormalValue(n, true, opts),
+      duration: normalDuration / STEPS_TILL_PEAK,
     })),
   ])
 
