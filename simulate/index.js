@@ -4,6 +4,7 @@ const moment = require('moment')
 const sleep = require('sleep-promise')
 const uuidv1 = require('uuid/v1')
 const mockEvent = require('../mocks/mockEvent')
+const eventMocks = require('../mocks/events')
 
 const STEPS_TILL_PEAK = 3
 
@@ -21,8 +22,16 @@ const getNormalValue = (n, isBeforePeak, { changeFunction, normalValue, peakValu
   }
 }
 
+const getMeasureValues = (eventType, value) => (
+  _.reduce(_.keys(eventMocks[eventType].measureValues), (memo, key) => {
+    memo[key] = value
+    return memo
+  }, {})
+)
+
 module.exports = async (opts) => {
   const {
+    eventType,
     normalDuration,
     peakValue,
     peakDuration,
@@ -46,19 +55,14 @@ module.exports = async (opts) => {
 
   console.log('> Simulation plan:')
   _.each(steps, ({ value, duration }) => {
-    console.log(`| Temperature event: ${_.round(value, 1)}; Wait ${_.round(duration, 1)}mins`)
+    console.log(`| "${eventType}" event: ${_.round(value, 1)}; Wait ${_.round(duration, 1)}mins`)
   })
   console.log('> Executing...')
 
   const sensorId = process.env.MOCK_EXTERNAL_ID || uuidv1()
 
   await forEachSeries(steps, async ({ value, duration }) => {
-    await mockEvent('temperature', {
-      sensorId,
-      measureValues: {
-        temperature: value,
-      },
-    })
+    await mockEvent(eventType, _.merge({ sensorId }, { measureValues: getMeasureValues(eventType, value) }))
 
     const milliseconds = moment.duration(duration, 'minutes').as('milliseconds')
     console.log(`> Waiting for ${_.round(duration, 1)} minutes...`)

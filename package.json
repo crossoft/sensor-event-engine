@@ -6,10 +6,12 @@
   "scripts": {
     "start": "node index.js",
     "mock": "SQL_LOGGING=false node cli/index.js mock",
-    "simulate-temperature-spike": "SQL_LOGGING=false node cli/index.js simulate-temperature-spike --with-return-to-normal",
-    "simulate-temperature-crater": "SQL_LOGGING=false node cli/index.js simulate-temperature-crater --with-return-to-normal",
-    "simulate-temperature-steady-gain": "SQL_LOGGING=false node cli/index.js simulate-temperature-steady-gain",
-    "simulate-temperature-steady-drop": "SQL_LOGGING=false node cli/index.js simulate-temperature-steady-drop",
+    "simulate": "SQL_LOGGING=false node cli/index.js simulate",
+    "simulate-temperature-spike": "SQL_LOGGING=false node cli/index.js simulate --event-type temperature --with-return-to-normal",
+    "simulate-temperature-crater": "SQL_LOGGING=false node cli/index.js simulate --event-type temperature --with-return-to-normal --peak-value='-10'",
+    "simulate-temperature-steady-gain": "SQL_LOGGING=false node cli/index.js simulate --event-type temperature --peak-value 50",
+    "simulate-temperature-steady-drop": "SQL_LOGGING=false node cli/index.js simulate --event-type temperature --peak-value='-10'",
+    "simulate-humidity-steady-gain": "SQL_LOGGING=false node cli/index.js simulate --event-type humidity --peak-value 50",
     "show": "SQL_LOGGING=false node cli/index.js show",
     "test": "CONSOLE_LOGGING=false SQL_LOGGING=false yarn jest"
   },
