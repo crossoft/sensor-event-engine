@@ -10,67 +10,146 @@ beforeEach(async () => {
   await db.sync({ force: true })
 })
 
-test('should be called', async () => {
-  const rule = {
-    condition: {
-      value: {
-        name: 'temperature'
-      },
-      comparison: 'gt',
-      threshold: 0
+describe('no scope', () => {
+  test('should be called', async () => {
+    const rule = {
+      condition: {
+        value: {
+          name: 'temperature'
+        },
+        comparison: 'gt',
+        threshold: 0
+      }
     }
-  }
 
-  const event = await Event.create({
-    type: 'temperature',
-    readings: [{
-      name: 'temperature',
-      value: 10,
-    }],
-  }, {
-    include: [Sensor, Reading],
+    const event = await Event.create({
+      type: 'temperature',
+      readings: [{
+        name: 'temperature',
+        value: 10,
+      }],
+    }, {
+      include: [Sensor, Reading],
+    })
+
+    const cb = jest.fn()
+    await apply([rule], event, cb)
+
+    expect(cb).toBeCalledWith(rule)
   })
 
-  const cb = jest.fn()
-  await apply([rule], event, cb)
+  test('should not be called', async () => {
+    const rule = {
+      condition: {
+        value: {
+          name: 'temperature'
+        },
+        comparison: 'gt',
+        threshold: 0
+      }
+    }
 
-  expect(cb).toBeCalledWith(rule)
+    const event = await Event.create({
+      readings: [{
+        name: 'temperature',
+        value: 10,
+      }],
+    }, {
+      include: [Sensor, Reading],
+    })
+
+    const cb = jest.fn()
+    await apply([rule], event, cb)
+
+    const event2 = await Event.create({
+      readings: [{
+        name: 'temperature',
+        value: 20,
+      }],
+    }, {
+      include: [Sensor, Reading],
+    })
+
+    const cb2 = jest.fn()
+    await apply([rule], event, cb2)
+
+    expect(cb2).not.toBeCalled()
+  })
 })
 
-test('should not be called', async () => {
-  const rule = {
-    condition: {
-      value: {
-        name: 'temperature'
+describe('with scope', () => {
+  test('should be called', async () => {
+    const rule = {
+      scope: {
+        event: {
+          type: 'temperature',
+        },
       },
-      comparison: 'gt',
-      threshold: 0
+      condition: {
+        value: {
+          name: 'temperature'
+        },
+        comparison: 'gt',
+        threshold: 0
+      }
     }
-  }
 
-  const event = await Event.create({
-    readings: [{
-      name: 'temperature',
-      value: 10,
-    }],
-  }, {
-    include: [Sensor, Reading],
+    const event = await Event.create({
+      type: 'temperature',
+      readings: [{
+        name: 'temperature',
+        value: 10,
+      }],
+    }, {
+      include: [Sensor, Reading],
+    })
+
+    const cb = jest.fn()
+    await apply([rule], event, cb)
+
+    expect(cb).toBeCalledWith(rule)
   })
 
-  const cb = jest.fn()
-  await apply([rule], event, cb)
+  test('should not be called', async () => {
+    const rule = {
+      scope: {
+        event: {
+          type: 'temperature',
+        },
+      },
+      condition: {
+        value: {
+          name: 'temperature'
+        },
+        comparison: 'gt',
+        threshold: 0
+      }
+    }
 
-  const event2 = await Event.create({
-    readings: [{
-      name: 'temperature',
-      value: 20,
-    }],
-  }, {
-    include: [Sensor, Reading],
+    const event = await Event.create({
+      readings: [{
+        name: 'temperature',
+        value: 10,
+      }],
+    }, {
+      include: [Sensor, Reading],
+    })
+
+    const cb = jest.fn()
+    await apply([rule], event, cb)
+
+    const event2 = await Event.create({
+      readings: [{
+        name: 'temperature',
+        value: 20,
+      }],
+    }, {
+      include: [Sensor, Reading],
+    })
+
+    const cb2 = jest.fn()
+    await apply([rule], event, cb2)
+
+    expect(cb2).not.toBeCalled()
   })
-
-  const cb2 = jest.fn()
-  await apply([rule], event, cb2)
-
-  expect(cb2).not.toBeCalled()
 })
