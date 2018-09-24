@@ -18,7 +18,7 @@
     "simulate-signal-strength-spike": "SQL_LOGGING=false node cli/index.js simulate --peak-value 200 --with-return-to-normal --signal-strength-follows",
     "simulate-signal-strength-drop": "SQL_LOGGING=false node cli/index.js simulate --peak-value='-10' --with-return-to-normal --signal-strength-follows",
     "show": "SQL_LOGGING=false node cli/index.js show",
-    "test": "CONSOLE_LOGGING=false SQL_LOGGING=false yarn jest"
+    "test": "DATABASE_LOCATION=./db/testing.sqlite CONSOLE_LOGGING=false SQL_LOGGING=false yarn jest"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
