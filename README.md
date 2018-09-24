@@ -451,7 +451,78 @@ Supported options:
 - `text` - email body
 - `recipients` - an array of email recipients (required, example: `["john@example.com", "peter@example.com"]`)
 
-## Testing & Mocking CLI
+## Simulations, Testing & Mocking CLI
+
+### Simulations
+
+You can simulate different event scenarios from console.
+
+#### Predefined
+
+There are a few scenarios predefined already for easy access. Run with `--help` flag to see how you can customise the scenario (for example: `yarn simulate-temperature-spike --help`)
+
+1. `yarn simulate-temperature-spike`
+
+Simulates linear temperature spike by default from 25C to 40C at with events 20 second intervals and peak for 1 minute.
+
+2. `yarn simulate-temperature-crater`
+
+Same as (1), but simulates a crater going from 25C to -10C.
+
+3. `yarn simulate-temperature-steady-gain`
+
+Gains temperature from 25C to 50C over 2 minutes.
+
+4. `yarn simulate-temperature-steady-drop`
+
+Drops temperature from 25C to -10 over 2 minutes.
+
+5. `yarn simulate-humidity-steady-gain`
+
+Same as (3), but for humidity.
+
+6. `yarn simulate-humidity-steady-drop`
+
+Same as (4), but for humidity.
+
+7. `yarn simulate-battery-steady-drop`
+
+Same as (4), but for battery.
+
+8. `yarn simulate-accelerometer-spike`
+
+Spikes all accelerator values over 2 minutes.
+
+9. `yarn simulate-signal-strength-spike`
+
+Spikes signal strength over 2 minutes.
+
+10. `yarn simulate-signal-strength-drop`
+
+Drops signal strength over 2 minutes.
+
+#### Simulating other scenarios with `yarn simulate`
+
+You can simulate almost any scenario with `yarn simulate` command. Here are the options:
+```sh
+$ yarn simulate --help
+
+  Usage: simulate [options]
+
+  Options:
+
+    --event-type <eventType>           event type (default: temperature)
+    --change-function <function>       value change function (default: linear)
+    --normal-value <value>             normal value (default: 25)
+    --normal-duration <minutes>        duration before the peak (default: 0.2)
+    --peak-value <value>               peak value (default: 40)
+    --peak-duration <minutes>          duration in peak (default: 1)
+    --with-return-to-normal            return to normal after peak
+    --signal-strength-follows          signal strength will follow normal and peak numbers
+    --sensor-id <sensorId>             provide a sensorId (default: 8d239de0-bfa9-11e8-9ba0-b171289cc46d)
+    --steps-till-peak <stepsTillPeak>  how many normal events leading up to the peak (default: 3)
+    -h, --help                         output usage information
+```
 
 ### Mocking
 You can mock fake all available events by calling this from console:
