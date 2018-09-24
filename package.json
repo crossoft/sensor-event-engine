@@ -6,8 +6,19 @@
   "scripts": {
     "start": "node index.js",
     "mock": "SQL_LOGGING=false node cli/index.js mock",
+    "simulate": "SQL_LOGGING=false node cli/index.js simulate",
+    "simulate-temperature-spike": "SQL_LOGGING=false node cli/index.js simulate --event-type temperature --with-return-to-normal",
+    "simulate-temperature-crater": "SQL_LOGGING=false node cli/index.js simulate --event-type temperature --with-return-to-normal --peak-value='-10'",
+    "simulate-temperature-steady-gain": "SQL_LOGGING=false node cli/index.js simulate --event-type temperature --peak-value 50",
+    "simulate-temperature-steady-drop": "SQL_LOGGING=false node cli/index.js simulate --event-type temperature --peak-value='-10'",
+    "simulate-humidity-steady-gain": "SQL_LOGGING=false node cli/index.js simulate --event-type humidity --peak-value 50",
+    "simulate-humidity-steady-drop": "SQL_LOGGING=false node cli/index.js simulate --event-type humidity --peak-value 0",
+    "simulate-battery-steady-drop": "SQL_LOGGING=false node cli/index.js simulate --event-type battery --peak-value 0",
+    "simulate-accelerometer-spike": "SQL_LOGGING=false node cli/index.js simulate --event-type accelerometer --normal-value 0 --peak-value 300 --with-return-to-normal",
+    "simulate-signal-strength-spike": "SQL_LOGGING=false node cli/index.js simulate --peak-value 200 --with-return-to-normal --signal-strength-follows",
+    "simulate-signal-strength-drop": "SQL_LOGGING=false node cli/index.js simulate --peak-value='-10' --with-return-to-normal --signal-strength-follows",
     "show": "SQL_LOGGING=false node cli/index.js show",
-    "test": "CONSOLE_LOGGING=false SQL_LOGGING=false yarn jest"
+    "test": "DATABASE_LOCATION=./db/testing.sqlite CONSOLE_LOGGING=false SQL_LOGGING=false yarn jest"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -20,6 +31,7 @@
     "p-iteration": "^1.1.7",
     "sequelize": "^4.38.0",
     "sha1": "^1.1.1",
+    "sleep-promise": "^8.0.1",
     "sparkpost": "^2.1.2",
     "sqlite3": "^4.0.2",
     "uuid": "^3.3.2"

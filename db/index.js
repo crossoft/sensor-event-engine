@@ -3,7 +3,7 @@ const dateTimeColumn = require('./helpers/dateTimeColumn')
 
 const db = new Sequelize('db', null, null, {
   dialect: 'sqlite',
-  storage: './db/db.sqlite',
+  storage: process.env.DATABASE_LOCATION ? process.env.DATABASE_LOCATION : './db/db.sqlite',
   operatorsAliases: false,
   logging: process.env.SQL_LOGGING === 'false' ? false : console.log,
   retry: {

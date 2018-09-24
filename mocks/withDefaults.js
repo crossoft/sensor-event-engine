@@ -3,9 +3,8 @@ const uuidv1 = require('uuid/v1')
 const moment = require('moment')
 
 module.exports = (eventData) => (
-  _.defaults(eventData, {
-    sensorId: process.env.MOCK_EXTERNAL_ID || uuidv1(),
+  _.merge({
     signalStrength: _.random(0, 10),
     dateTimeUtc: moment.utc().format(),
-  })
+  }, eventData)
 )

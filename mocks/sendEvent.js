@@ -7,5 +7,5 @@ module.exports = async (eventData) => {
     body: JSON.stringify(eventData),
   })
 
-  console.log(await resp.json())
+  console.log('Event sent:', eventData)
 }
