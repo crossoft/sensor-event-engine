@@ -26,22 +26,23 @@ module.exports = async (opts) => {
     normalDuration,
     peakValue,
     peakDuration,
+    withReturnToNormal,
   } = opts
 
-  const steps = _.flatten([
+  const steps = _.compact(_.flatten([
     _.times(STEPS_TILL_PEAK, (n) => ({
-      value: getNormalValue(n, false, opts),
+      value: getNormalValue(n, true, opts),
       duration: normalDuration / STEPS_TILL_PEAK,
     })),
     {
       value: peakValue,
       duration: peakDuration,
     },
-    _.times(STEPS_TILL_PEAK, (n) => ({
-      value: getNormalValue(n, true, opts),
+    withReturnToNormal && _.times(STEPS_TILL_PEAK, (n) => ({
+      value: getNormalValue(n, false, opts),
       duration: normalDuration / STEPS_TILL_PEAK,
     })),
-  ])
+  ]))
 
   console.log('> Simulation plan:')
   _.each(steps, ({ value, duration }) => {

@@ -11,20 +11,32 @@ program
 
 program
   .command('simulate-temperature-spike')
-  .option('--change-function <function>', 'value change function', 'parabola')
+  .option('--change-function <function>', 'value change function', 'linear')
   .option('--normal-value <value>', 'normal value', 25)
   .option('--normal-duration <minutes>', 'duration before the peak', 1)
   .option('--peak-value <value>', 'peak value', 40)
   .option('--peak-duration <minutes>', 'duration in peak', 1)
+  .option('--with-return-to-normal', 'return to normal after peak')
   .action(simulateTemperatureSpike)
 
 program
   .command('simulate-temperature-crater')
-  .option('--change-function <function>', 'value change function', 'parabola')
+  .option('--change-function <function>', 'value change function', 'linear')
   .option('--normal-value <value>', 'normal value', 25)
   .option('--normal-duration <minutes>', 'duration before the peak', 1)
   .option('--peak-value <value>', 'peak value', -10)
   .option('--peak-duration <minutes>', 'duration in peak', 1)
+  .option('--with-return-to-normal', 'return to normal after peak')
+  .action(simulateTemperatureSpike)
+
+program
+  .command('simulate-temperature-steady-gain')
+  .option('--change-function <function>', 'value change function', 'linear')
+  .option('--normal-value <value>', 'normal value', 25)
+  .option('--normal-duration <minutes>', 'duration before the peak', 1)
+  .option('--peak-value <value>', 'peak value', 50)
+  .option('--peak-duration <minutes>', 'duration in peak', 1)
+  .option('--with-return-to-normal', 'return to normal after peak')
   .action(simulateTemperatureSpike)
 
 program
