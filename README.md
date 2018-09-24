@@ -371,6 +371,25 @@ last 30 minutes.
 }
 ```
 
+#### Additional notes on `motion`
+
+Since motion is the only event that has non-numerical values, here's an example
+how to use a rule on it:
+```json
+{
+  "condition": {
+    "value": {
+      "name": "motion"
+    },
+    "comparison": "eq",
+    "threshold": "1",
+  }
+}
+```
+
+Notice that `true` is mapped with `"1"` and `false` with `"0"` (quotation marks
+are important).
+
 ### Actions
 
 `actions` is an array of actions that will be executed when the rule is
