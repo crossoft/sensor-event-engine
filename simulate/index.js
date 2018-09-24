@@ -36,6 +36,7 @@ module.exports = async (opts) => {
     peakValue,
     peakDuration,
     withReturnToNormal,
+    signalStrengthFollows,
   } = opts
 
   const steps = _.compact(_.flatten([
@@ -55,14 +56,19 @@ module.exports = async (opts) => {
 
   console.log('> Simulation plan:')
   _.each(steps, ({ value, duration }) => {
-    console.log(`| "${eventType}" event: ${_.round(value, 1)}; Wait ${_.round(duration, 1)}mins`)
+    const signalStrengthPart = signalStrengthFollows && ` "signalStrength": ${_.round(value, 1)};`
+    console.log(`| "${eventType}" event: ${_.round(value, 1)};${signalStrengthPart} Wait ${_.round(duration, 1)}mins`)
   })
   console.log('> Executing...')
 
   const sensorId = process.env.MOCK_EXTERNAL_ID || uuidv1()
 
   await forEachSeries(steps, async ({ value, duration }) => {
-    await mockEvent(eventType, _.merge({ sensorId }, { measureValues: getMeasureValues(eventType, value) }))
+    await mockEvent(eventType, _.merge(
+      { sensorId },
+      { measureValues: getMeasureValues(eventType, value) },
+      signalStrengthFollows ? { signalStrength: value } : {},
+    ))
 
     const milliseconds = moment.duration(duration, 'minutes').as('milliseconds')
     console.log(`> Waiting for ${_.round(duration, 1)} minutes...`)

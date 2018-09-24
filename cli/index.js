@@ -19,6 +19,7 @@ program
   .option('--peak-value <value>', 'peak value', _.toNumber, 40)
   .option('--peak-duration <minutes>', 'duration in peak', _.toNumber, 1)
   .option('--with-return-to-normal', 'return to normal after peak')
+  .option('--signal-strength-follows', 'signal strength will follow normal and peak numbers')
   .action(simulate)
 
 program

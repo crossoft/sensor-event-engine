@@ -15,6 +15,7 @@
     "simulate-humidity-steady-drop": "SQL_LOGGING=false node cli/index.js simulate --event-type humidity --peak-value 0",
     "simulate-battery-steady-drop": "SQL_LOGGING=false node cli/index.js simulate --event-type battery --peak-value 0",
     "simulate-accelerometer-spike": "SQL_LOGGING=false node cli/index.js simulate --event-type accelerometer --normal-value 0 --peak-value 300 --with-return-to-normal",
+    "simulate-signal-strength-spike": "SQL_LOGGING=false node cli/index.js simulate --event-type temperature --normal-value 0 --peak-value 200 --with-return-to-normal --signal-strength-follows",
     "show": "SQL_LOGGING=false node cli/index.js show",
     "test": "CONSOLE_LOGGING=false SQL_LOGGING=false yarn jest"
   },
