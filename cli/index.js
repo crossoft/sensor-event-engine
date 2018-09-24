@@ -1,5 +1,7 @@
 const _ = require('lodash')
+const uuidv1 = require('uuid/v1')
 const program = require('commander')
+
 const mockEvent = require('../mocks/mockEvent')
 const showEvents = require('./showEvents')
 const showSensors = require('./showSensors')
@@ -8,6 +10,7 @@ const simulate = require('../simulate')
 
 program
   .command('mock <eventType>')
+  .option('--sensor-id <sensorId>', 'provide a sensorId', uuidv1())
   .action(mockEvent)
 
 program
@@ -20,6 +23,7 @@ program
   .option('--peak-duration <minutes>', 'duration in peak', _.toNumber, 1)
   .option('--with-return-to-normal', 'return to normal after peak')
   .option('--signal-strength-follows', 'signal strength will follow normal and peak numbers')
+  .option('--sensor-id <sensorId>', 'provide a sensorId', uuidv1())
   .action(simulate)
 
 program

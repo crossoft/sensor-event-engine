@@ -2,7 +2,6 @@ const _ = require('lodash')
 const { forEachSeries } = require('p-iteration')
 const moment = require('moment')
 const sleep = require('sleep-promise')
-const uuidv1 = require('uuid/v1')
 const mockEvent = require('../mocks/mockEvent')
 const eventMocks = require('../mocks/events')
 
@@ -37,6 +36,7 @@ module.exports = async (opts) => {
     peakDuration,
     withReturnToNormal,
     signalStrengthFollows,
+    sensorId,
   } = opts
 
   const steps = _.compact(_.flatten([
@@ -60,8 +60,6 @@ module.exports = async (opts) => {
     console.log(`| "${eventType}" event: ${_.round(value, 1)};${signalStrengthPart} Wait ${_.round(duration, 1)}mins`)
   })
   console.log('> Executing...')
-
-  const sensorId = process.env.MOCK_EXTERNAL_ID || uuidv1()
 
   await forEachSeries(steps, async ({ value, duration }) => {
     await mockEvent(eventType, _.merge(
